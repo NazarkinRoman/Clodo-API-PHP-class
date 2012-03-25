@@ -44,7 +44,7 @@ class ClodoApi {
   * используется для авторизации и получения данных.
   * Основная функция класса. */
 
-  private function sendRequest($headers, $login = false, $uri = '', $post = '', $custom_url = '') {
+  private function sendRequest($headers, $login = false, $uri = '', $post = '', $custom_url = '', $delete = false) {
     $ch = curl_init();
 
     $url = ($custom_url) ? $custom_url.$uri : $this->managment_url . $uri;
@@ -60,6 +60,7 @@ class ClodoApi {
       $headers[] = 'Accept: application/' . $this->accept;
       $headers[] = 'X-Auth-Token: ' . $this->token;
     }
+    if($delete) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -220,6 +221,10 @@ class ClodoApi {
   public function get_os_list($detail = false) {
     if($detail) return $this->sendRequest(array(), false, '/images/detail');
     else return $this->sendRequest(array(), false, '/images');
+  }
+
+  public function delete_server($id) {
+    return $this->sendRequest(array(), false, '/servers/'.$id, '', '', true);
   }
 
 
