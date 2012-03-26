@@ -223,8 +223,17 @@ class ClodoApi {
     else return $this->sendRequest(array(), false, '/images');
   }
 
+  /* Удаляет указанный сервер */
+
   public function delete_server($id) {
     return $this->sendRequest(array(), false, '/servers/'.$id, '', '', true);
+  }
+
+  /* Преобразовывает указанный сервер из ScaleServer в VirtualServer и наоборот */
+
+  public function change_server_type($id, $pay_type) {
+    $post_data = json_encode(array('server' => array('pay_type' => $pay_type)));
+    return $this->sendRequest(array(), false, "/servers/{$id}/change_type/", $post_data);
   }
 
 
